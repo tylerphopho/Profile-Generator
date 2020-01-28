@@ -34,6 +34,20 @@ function generateHTML() {
   <div class="jumbotron jumbotron-fluid">
   <div class="container">
     <h1 class="display-4">Hi! My name is ${answers.name}</h1>
+    <img src="${answers.images} class="img-fluid alt="users-image">
+    
     `
+};
 
-}
+promptUser()
+  .then(function(answers) {
+    const html = generateHTML(answers);
+
+    return writeFileAsync("index.html", html);
+  })
+  .then(function() {
+    console.log("Successfully wrote to index.html");
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
