@@ -1,43 +1,37 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 const util = require("util");
+const generateHTML = require("./generateHTML");
 const axios = require("axios");
 
 const writeFileAsync = util.promisify(fs.writeFile);
 
+function init() {
+};
+
 function promptUser() {
-    return inquirer.prompt ([
-        {
-            type: "input",
-            name: "user-name",
-            message: "What is your GitHub username?"
-        },
-        {
-            type: "input",
-            name: "favorite-color",
-            message: "What is your favorite color?"
-        },
-    ]);
+    const username = inquirer.prompt({
+        type: "input",
+        message: "What is your GitHub username?",
+        name: "username" 
+    })
+     return username;
 }
 
-function generateHTML() {
-    return `
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <title>Document</title>
-</head>
-<body>
-  <div class="jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-4">Hi! My name is ${answers.name}</h1>
-    <img src="${answers.images} class="img-fluid alt="users-image">
-    
-    `
-};
+function promptColor() {
+    const color = inquirer.prompt({
+        type: "list",
+        message: "What is your favorite color?",
+        choices: ["Red", "Blue", "Green", "Yellow",]
+    })
+    return color;
+}
+
+function gitUser(username) {
+    const github = axios.get(`https://api.github.com/users/${username}`);
+    return github
+}
+
 
 promptUser()
   .then(function(answers) {
